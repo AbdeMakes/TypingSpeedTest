@@ -1,17 +1,26 @@
 import random as rd
 import time
 import os
+from difflib import SequenceMatcher
 
 os.system("cls")
 
-predefined=["Three years after the accepted answer clearly mentions",
-            "The quick brown fox jumps over the lazy dog.",
-            "I'm aiming at the flower! That's a fat guy in a flowered shirt.",
-            "apple"
-            ]
+#importing sentences
+with open("senteces.txt", 'r') as file:
+        lines = file.readlines()
+        sentences= [line.strip() for line in lines]
 
+# function to check accuracy of input
+def StringAccuracy(str1, str2):
+    similarity_ratio = SequenceMatcher(None, str1, str2).ratio()
+
+    similarity_percentage = similarity_ratio * 100
+    return round(similarity_percentage, 2)
+
+
+# function of the test
 def typetest():
-    prompt=rd.choice(predefined)
+    prompt=rd.choice(sentences)
     stTime= time.time()
 
     os.system("cls")
@@ -22,14 +31,7 @@ def typetest():
 
     timeTaken=time.time()-stTime
 
-    accuracy=0
-    for i in range(0,len(prompt)):
-        try:
-            if prompt[i]== inp[i]:
-                accuracy+=1
-        except:
-            break
-    accuracy=int((accuracy/len(prompt)*100))
+    accuracy= StringAccuracy(prompt,inp)
 
     wpm=int((len(inp)/5)/(timeTaken/60))
 
@@ -39,8 +41,10 @@ def typetest():
     print("Words per minuts "+str(wpm))
     print("-------------------------------")
 
-run=True
 
+
+#main loop for the program with simple menu
+run=True
 while run:
     print("Type Test\n")
     print("1.Start")
